@@ -1,10 +1,15 @@
 package guru.springframework.bootstrap;
 
 import guru.springframework.domain.*;
+import guru.springframework.repositories.CategoryReactiveRepository;
 import guru.springframework.repositories.CategoryRepository;
+import guru.springframework.repositories.RecipeReactiveRepository;
 import guru.springframework.repositories.RecipeRepository;
+import guru.springframework.repositories.UnitOfMeasureReactiveRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -25,6 +30,15 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     private final CategoryRepository categoryRepository;
     private final RecipeRepository recipeRepository;
     private final UnitOfMeasureRepository unitOfMeasureRepository;
+    
+//    @Autowired
+//    private CategoryReactiveRepository categoryReactiveRepository;
+//    
+//    @Autowired
+//    private RecipeReactiveRepository recipeReactiveRepository;
+//    
+//    @Autowired
+//    private UnitOfMeasureReactiveRepository uomReactiveRepository;
 
     public RecipeBootstrap(CategoryRepository categoryRepository,
                            RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
@@ -40,6 +54,12 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         loadUom();
         recipeRepository.saveAll(getRecipes());
         log.debug("Loading Bootstrap Data");
+        
+//        log.error("#########################");
+//        log.error("Category count: " + categoryReactiveRepository.count().block().toString());
+//        log.error("Recipe count: " + recipeReactiveRepository.count().block().toString());
+//        log.error("Unit of Measure count: " + uomReactiveRepository.count().block().toString());
+//        log.error("#########################");
     }
 
     private void loadCategories(){
