@@ -44,16 +44,14 @@ public class IngredientServiceImpl implements IngredientService {
     public Mono<IngredientCommand> findByRecipeIdAndIngredientId(String recipeId, String ingredientId) {
 
         	return	recipeReactiveRepository.findById(recipeId)
-	        			.map(recipe -> recipe.getIngredients()
-	        								.stream()
-	        								.filter(ing -> ing.getId().equals(ingredientId))
-	        								.findFirst())
-	        			.filter(Optional::isPresent)
-	        			.map(ingOpt -> {
-	        				IngredientCommand ingCom = ingredientToIngredientCommand.convert(ingOpt.get());
-	        				ingCom.setRecipeId(recipeId);
-	        				return ingCom;
-	        			});
+					.flatMapIterable(Recipe::getIngredients)
+					.filter(ing -> ing.getId().equals(ingredientId))
+					.single()
+					.map(ing -> {
+		    				IngredientCommand ingCom = ingredientToIngredientCommand.convert(ing);
+		    				ingCom.setRecipeId(recipeId);;
+		    				return ingCom;
+	    				});
     }
 
     @Override
